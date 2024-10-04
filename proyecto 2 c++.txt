@@ -1,0 +1,149 @@
+#include <iostream>
+#include <fstream>  // Para manejo de archivos
+#include <vector>   // Para almacenar una lista de productos en memoria
+#include <string>   // Para manejo de cadenas de texto
+
+// Definimos una estructura llamada "Producto"
+// Esto es como un contenedor que guarda varios datos relacionados con un producto.
+struct Producto {
+    std::string nombre;
+    std::string codigo;
+    float precio;
+    std::string proveedor;
+    int existencia;
+    char estado;  // A = Aprobado, N = No aprobado
+    float descuento;
+};
+
+// Función para agregar un producto nuevo
+void agregarProducto(std::vector<Producto>& productos) {
+    Producto prod;
+
+    // Pedimos los datos al usuario
+    std::cout << "Ingrese el código del producto: ";
+    std::cin >> prod.codigo;
+
+    // Comprobamos si el código ya existe para evitar duplicados
+    for (const auto& p : productos) {
+        if (p.codigo == prod.codigo) {
+            std::cout << "El código ya existe, no se puede agregar.\n";
+            return;  // Terminamos la función si el código se repite
+        }
+    }
+
+    // Si el código es único, pedimos el resto de la información
+    std::cout << "Ingrese el nombre del producto: ";
+    std::cin >> prod.nombre;
+    std::cout << "Ingrese el precio: ";
+    std::cin >> prod.precio;
+    std::cout << "Ingrese el proveedor: ";
+    std::cin >> prod.proveedor;
+    std::cout << "Ingrese la cantidad en existencia: ";
+    std::cin >> prod.existencia;
+    std::cout << "Ingrese el estado (A = Aprobado, N = No aprobado): ";
+    std::cin >> prod.estado;
+    std::cout << "Ingrese el descuento: ";
+    std::cin >> prod.descuento;
+
+    // Agregamos el producto al vector de productos
+    productos.push_back(prod);
+    std::cout << "Producto agregado con éxito.\n";
+}
+
+// Función para buscar un producto por su código o nombre
+void buscarProducto(const std::vector<Producto>& productos) {
+    std::string busqueda;
+    std::cout << "Ingrese el código o nombre del producto a buscar: ";
+    std::cin >> busqueda;
+
+    // Esta variable nos ayudará a saber si encontramos algún producto
+    bool encontrado = false;
+
+    // Buscamos en todos los productos si alguno tiene el código o nombre que buscamos
+    for (const auto& prod : productos) {
+        // Comparamos el código exacto o si el nombre contiene la palabra buscada
+        if (prod.codigo == busqueda || prod.nombre.find(busqueda) != std::string::npos) {
+            // Mostramos la información del producto
+            std::cout << "Producto encontrado: " << prod.nombre << " - Código: " << prod.codigo << "\n";
+            encontrado = true;  // Marcamos que lo hemos encontrado
+        }
+    }
+
+    if (!encontrado) {
+        std::cout << "Producto no encontrado.\n";
+    }
+}
+
+// Función para modificar los datos de un producto (excepto el código)
+void modificarProducto(std::vector<Producto>& productos) {
+    std::string codigo;
+    std::cout << "Ingrese el código del producto a modificar: ";
+    std::cin >> codigo;
+
+    // Recorremos todos los productos buscando el que tenga el código dado
+    for (auto& prod : productos) {
+        if (prod.codigo == codigo) {
+            // Si encontramos el producto, pedimos nuevos valores para sus atributos
+            std::cout << "Producto encontrado. Ingrese nuevos valores.\n";
+            std::cout << "Ingrese el nuevo nombre: ";
+            std::cin >> prod.nombre;
+            std::cout << "Ingrese el nuevo precio: ";
+            std::cin >> prod.precio;
+            std::cout << "Ingrese el nuevo proveedor: ";
+            std::cin >> prod.proveedor;
+            std::cout << "Ingrese la nueva cantidad en existencia: ";
+            std::cin >> prod.existencia;
+            std::cout << "Ingrese el nuevo estado (A/N): ";
+            std::cin >> prod.estado;
+            std::cout << "Ingrese el nuevo descuento: ";
+            std::cin >> prod.descuento;
+            std::cout << "Producto modificado con éxito.\n";
+            return;
+        }
+    }
+
+    std::cout << "Producto no encontrado.\n";
+}
+
+// Función para mostrar el menú al usuario
+void mostrarMenu() {
+    std::cout << "1. Agregar producto\n";
+    std::cout << "2. Buscar producto\n";
+    std::cout << "3. Modificar producto\n";
+    std::cout << "4. Salir\n";
+}
+
+// Función principal donde se maneja todo el flujo del programa
+int main() {
+    // Aquí almacenamos todos los productos en un vector (una lista dinámica)
+    std::vector<Producto> productos;
+
+    int opcion;  // Variable para almacenar la opción del menú que elija el usuario
+
+    // Bucle que continúa hasta que el usuario elige salir (opción 4)
+    do {
+        mostrarMenu();  // Mostramos el menú
+        std::cout << "Seleccione una opción: ";
+        std::cin >> opcion;  // Leemos la opción seleccionada por el usuario
+
+        // Evaluamos la opción seleccionada usando un "switch"
+        switch (opcion) {
+            case 1:
+                agregarProducto(productos);  // Llamamos a la función para agregar un producto
+                break;
+            case 2:
+                buscarProducto(productos);  // Llamamos a la función para buscar un producto
+                break;
+            case 3:
+                modificarProducto(productos);  // Llamamos a la función para modificar un producto
+                break;
+            case 4:
+                std::cout << "Saliendo...\n";
+                break;
+            default:
+                std::cout << "Opción no válida. Intente de nuevo.\n";
+        }
+    } while (opcion != 4);  // Repetimos el bucle mientras la opción no sea salir
+
+    return 0;
+}

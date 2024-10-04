@@ -1,0 +1,111 @@
+# Creamos una clase para representar un producto
+class Producto:
+    # El método __init__ define los atributos de un producto
+    def __init__(self, nombre, codigo, precio, proveedor, existencia, estado, descuento):
+        self.nombre = nombre
+        self.codigo = codigo
+        self.precio = precio
+        self.proveedor = proveedor
+        self.existencia = existencia
+        self.estado = estado
+        self.descuento = descuento
+
+# Función para agregar un producto nuevo
+def agregar_producto(productos):
+    codigo = input("Ingrese el código del producto: ")
+
+    # Verificamos si el código ya existe para evitar duplicados
+    for prod in productos:
+        if prod.codigo == codigo:
+            print("El código ya existe, no se puede agregar.")
+            return
+
+    # Si el código es único, pedimos el resto de la información
+    nombre = input("Ingrese el nombre del producto: ")
+    precio = float(input("Ingrese el precio: "))
+    proveedor = input("Ingrese el proveedor: ")
+    existencia = int(input("Ingrese la cantidad en existencia: "))
+    estado = input("Ingrese el estado (A = Aprobado, N = No aprobado): ")
+    descuento = float(input("Ingrese el descuento: "))
+
+    # Creamos un nuevo producto
+    nuevo_producto = Producto(nombre, codigo, precio, proveedor, existencia, estado, descuento)
+    
+    # Agregamos el producto a la lista
+    productos.append(nuevo_producto)
+    print("Producto agregado con éxito.")
+
+# Función para buscar un producto por código o por nombre
+def buscar_producto(productos):
+    busqueda = input("Ingrese el código o nombre del producto a buscar: ")
+
+    # Variable para verificar si encontramos algún producto
+    encontrado = False
+
+    # Buscamos en la lista de productos si alguno coincide con el código o nombre
+    for prod in productos:
+        if prod.codigo == busqueda or busqueda in prod.nombre:
+            print(f"Producto encontrado: {prod.nombre} - Código: {prod.codigo}")
+            print(f"Precio: {prod.precio}, Proveedor: {prod.proveedor}")
+            print(f"Existencia: {prod.existencia}, Estado: {prod.estado}, Descuento: {prod.descuento}")
+            encontrado = True
+
+    if not encontrado:
+        print("Producto no encontrado.")
+
+# Función para modificar los datos de un producto (excepto el código)
+def modificar_producto(productos):
+    codigo = input("Ingrese el código del producto a modificar: ")
+
+    # Buscamos el producto por su código
+    for prod in productos:
+        if prod.codigo == codigo:
+            print("Producto encontrado. Ingrese nuevos valores.")
+
+            # Pedimos al usuario nuevos valores para los atributos del producto
+            prod.nombre = input("Ingrese el nuevo nombre: ")
+            prod.precio = float(input("Ingrese el nuevo precio: "))
+            prod.proveedor = input("Ingrese el nuevo proveedor: ")
+            prod.existencia = int(input("Ingrese la nueva cantidad en existencia: "))
+            prod.estado = input("Ingrese el nuevo estado (A/N): ")
+            prod.descuento = float(input("Ingrese el nuevo descuento: "))
+            print("Producto modificado con éxito.")
+            return
+
+    print("Producto no encontrado.")
+
+# Función para mostrar el menú
+def mostrar_menu():
+    print("\n=== Menú ===")
+    print("1. Agregar producto")
+    print("2. Buscar producto")
+    print("3. Modificar producto")
+    print("4. Salir")
+
+# Función principal donde se ejecuta el programa
+def main():
+    # Esta lista almacenará los productos en memoria
+    productos = []
+
+    opcion = 0  # Variable para almacenar la opción seleccionada por el usuario
+
+    # Bucle que continúa hasta que el usuario elige salir (opción 4)
+    while opcion != 4:
+        mostrar_menu()  # Mostramos el menú
+        opcion = int(input("Seleccione una opción: "))  # Leemos la opción seleccionada por el usuario
+
+        # Evaluamos la opción seleccionada
+        if opcion == 1:
+            agregar_producto(productos)  # Llamamos a la función para agregar un producto
+        elif opcion == 2:
+            buscar_producto(productos)  # Llamamos a la función para buscar un producto
+        elif opcion == 3:
+            modificar_producto(productos)  # Llamamos a la función para modificar un producto
+        elif opcion == 4:
+            print("Saliendo del programa...")
+        else:
+            print("Opción no válida. Intente de nuevo.")
+
+# Ejecutar la función principal
+if __name__ == "__main__":
+    main()
